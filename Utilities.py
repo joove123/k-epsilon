@@ -216,7 +216,7 @@ def initialize_turbulent_terms(nu, k0, e0, u1, y):
 
 # ---------------- Mesh and distance constructor ---------------- #
 
-def Load_mesh_from_file(mesh_directory, facet_directory):
+def load_mesh_from_file(mesh_directory, facet_directory):
     '''Loads .xdmf mesh and faces mesh'''
     mesh = Mesh()
     with XDMFFile(mesh_directory) as infile:
@@ -228,7 +228,7 @@ def Load_mesh_from_file(mesh_directory, facet_directory):
     marked_facets = cpp.mesh.MeshFunctionSizet(mesh, mvc)
     return mesh, marked_facets
 
-def Calculate_Distance_field(Space, mf, wall_index, relax):
+def calculate_Distance_field(Space, mf, wall_index, relax):
     '''computes ditance to boundaries specified by wall_index on mf'''
     bcy = []
     for index in wall_index:
