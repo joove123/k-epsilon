@@ -11,8 +11,8 @@ from Utilities import load_mesh_from_file, calculate_Distance_field
 # -------------------- Simulation parameters -------------------- #
 
 # mesh and facet directory
-MESH_DIRECTORY  = 'meshes/BackStep/Coarse/mesh.xdmf'
-FACET_DIRECTORY = 'meshes/BackStep/Coarse/facet.xdmf'
+MESH_DIRECTORY  = 'meshes/BackStep/Fine/mesh.xdmf'
+FACET_DIRECTORY = 'meshes/BackStep/Fine/facet.xdmf'
 
 # specify what markers belong to what boundary
 INFLOW_MARKERS   = [4]
