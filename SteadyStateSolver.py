@@ -6,19 +6,19 @@ from Utilities import calculate_cfl_time_step, bound_from_bellow
 from Utilities import save_pvd_file, save_h5_file, save_list
 from Utilities import visualize_functions, visualize_convergence
 from Utilities import initialize_functions, initialize_mixed_functions, initialize_turbulent_terms
-from Utilities import Load_mesh_from_file, Calculate_Distance_field
+from Utilities import load_mesh_from_file, calculate_Distance_field
 
 # -------------------- Simulation parameters -------------------- #
 
 # mesh and facet directory
-MESH_DIRECTORY  = 'github-kepsilon/meshes/Obstacle/Coarse/mesh.xdmf'
-FACET_DIRECTORY = 'github-kepsilon/meshes/Obstacle/Coarse/facet.xdmf'
+MESH_DIRECTORY  = 'meshes/BackStep/Coarse/mesh.xdmf'
+FACET_DIRECTORY = 'meshes/BackStep/Coarse/facet.xdmf'
 
 # specify what markers belong to what boundary
-INFLOW_MARKERS   = [1] #[4]
-OUTFLOW_MARKERS  = [2] #[2]
-WALL_MARKERS     = [3] #[1,3]
-SYMMETRY_MARKERS = [4] #[5]
+INFLOW_MARKERS   = [4]
+OUTFLOW_MARKERS  = [2]
+WALL_MARKERS     = [1,3]
+SYMMETRY_MARKERS = [5]
 
 # specify physical constants
 NU    = 0.000181818
@@ -66,8 +66,7 @@ W = FunctionSpace(mesh, W_elem)
 K = FunctionSpace(mesh, "CG", 1) 
 
 # Construct distance function
-#y = Calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.01)
-y = Expression('sqrt(x[0]*x[0] + x[1]*x[1]) - r', r=0.1, degree=1)
+y = Calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.0125)
 
 # Construct boundary conditions
 bcw=[]; bck=[]; bce=[]
