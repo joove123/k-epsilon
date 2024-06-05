@@ -50,7 +50,7 @@ IS_SAVING   = False
 # -------------------- Problem construction --------------------- #
 
 # Load mesh and construct integration measure
-[mesh, marked_facets] = Load_mesh_from_file(MESH_DIRECTORY, FACET_DIRECTORY)
+[mesh, marked_facets] = load_mesh_from_file(MESH_DIRECTORY, FACET_DIRECTORY)
 dx = Measure("dx", domain=mesh, metadata={"quadrature_degree": QUADRATURE_DEGREE})
 ds = Measure("ds", domain=mesh, metadata={"quadrature_degree": QUADRATURE_DEGREE})
 
@@ -66,7 +66,7 @@ W = FunctionSpace(mesh, W_elem)
 K = FunctionSpace(mesh, "CG", 1) 
 
 # Construct distance function
-y = Calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.0125)
+y = calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.0125)
 
 # Construct boundary conditions
 bcw=[]; bck=[]; bce=[]
