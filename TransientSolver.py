@@ -51,7 +51,7 @@ IS_SAVING   = False
 # -------------------- Problem construction --------------------- #
 
 # Load mesh and construct integration measure
-[mesh, marked_facets] = Load_mesh_from_file(MESH_DIRECTORY, FACET_DIRECTORY)
+[mesh, marked_facets] = load_mesh_from_file(MESH_DIRECTORY, FACET_DIRECTORY)
 dx = Measure("dx", domain=mesh, metadata={"quadrature_degree": QUADRATURE_DEGREE})
 ds = Measure("ds", domain=mesh, metadata={"quadrature_degree": QUADRATURE_DEGREE})
 
