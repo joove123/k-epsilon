@@ -6,7 +6,7 @@ from Utilities import calculate_cfl_time_step, bound_from_bellow
 from Utilities import save_pvd_file, save_h5_file, save_list
 from Utilities import visualize_functions, visualize_convergence
 from Utilities import initialize_functions, initialize_mixed_functions, initialize_turbulent_terms
-from Utilities import Load_mesh_from_file, Calculate_Distance_field
+from Utilities import load_mesh_from_file, calculate_Distance_field
 
 # -------------------- Simulation parameters -------------------- #
 
