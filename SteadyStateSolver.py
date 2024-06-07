@@ -37,13 +37,13 @@ PICARD_RELAXATION = 0.1
 TOLERANCE         = 1e-7
 
 # directory for saving 
-PVD_DIRECTORY       = 'results/pvd/'
-H5_DIRECTORY        = 'results/h5/'
-RESIDUALS_DIRECTORY = 'results/residuals/'
+PVD_DIRECTORY       = None
+H5_DIRECTORY        = None
+RESIDUALS_DIRECTORY = None
 
 # Post-processing
 IS_PLOTTING = True
-IS_SAVING   = True
+IS_SAVING   = False
 
 # --------------------------------------------------------------- #
 
