@@ -32,18 +32,18 @@ E_INIT = 1.970
 
 # specify symulation for numerical integration
 QUADRATURE_DEGREE = 2
-ITER_MAX          = 3000
+ITER_MAX          = 1000
 PICARD_RELAXATION = 0.1
-TOLERANCE         = 1e-6
+TOLERANCE         = 1e-7
 
 # directory for saving 
-PVD_DIRECTORY       = None
-H5_DIRECTORY        = None
-RESIDUALS_DIRECTORY = None
+PVD_DIRECTORY       = 'results/pvd/'
+H5_DIRECTORY        = 'results/h5/'
+RESIDUALS_DIRECTORY = 'results/residuals/'
 
 # Post-processing
 IS_PLOTTING = True
-IS_SAVING   = False
+IS_SAVING   = True
 
 # --------------------------------------------------------------- #
 
@@ -66,7 +66,7 @@ W = FunctionSpace(mesh, W_elem)
 K = FunctionSpace(mesh, "CG", 1) 
 
 # Construct distance function
-y = calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.0125)
+y = calculate_Distance_field(K, marked_facets, WALL_MARKERS, 0.01)
 
 # Construct boundary conditions
 bcw=[]; bck=[]; bce=[]
@@ -85,10 +85,12 @@ for marker in WALL_MARKERS:
 
 for marker in SYMMETRY_MARKERS:
     bcw.append(DirichletBC(W.sub(0).sub(1), Constant(0.0), marked_facets, marker))
+    bck.append(DirichletBC(K, Constant(K_INIT), marked_facets, marker))
+    bce.append(DirichletBC(K, Constant(E_INIT), marked_facets, marker))
 
 # Construct functions
 u,v,u1,u0,p,q,p1,p0,w1,w0 = \
-              initialize_mixed_functions(W, Constant((U_INIT, 0.0, P_INIT)))
+              initialize_mixed_functions(W, Constant((0.0, 0.0, P_INIT)))
 k,phi,k1,k0 = initialize_functions(K, Constant(K_INIT))
 e,psi,e1,e0 = initialize_functions(K, Constant(E_INIT))
 
@@ -138,50 +140,52 @@ a_e = lhs(FE); l_e = rhs(FE)
 residuals = {'u':[], 'p':[], 'k':[], 'e':[]}
 
 loop_timer = time.time()
-for iter in range(ITER_MAX):
+try:
+    for iter in range(ITER_MAX):
+        # Loop that solves RANS steps 1,2,3 and KEPS
+        for a,l,bcs,f in zip((a_w,a_k,a_e),
+                             (l_w,l_k,l_e),
+                             (bcw,bck,bce),
+                             (w1, k1, e1)):
+            # Solve linear system
+            A = assemble(a); b = assemble(l)
+            [bc.apply(A,b) for bc in bcs]
+            solve(A, f.vector(), b)
 
-    # Loop that solves RANS steps 1,2,3 and KEPS
-    for a,l,bcs,f in zip((a_w,a_k,a_e),
-                         (l_w,l_k,l_e),
-                         (bcw,bck,bce),
-                         (w1, k1, e1)):
-        # Solve linear system
-        A = assemble(a); b = assemble(l)
-        [bc.apply(A,b) for bc in bcs]
-        solve(A, f.vector(), b)
+        # Bound k and epsilon from bellow
+        k1 = bound_from_bellow(k1, 1e-16)
+        e1 = bound_from_bellow(e1, 1e-16)
 
-    # Bound k and epsilon from bellow
-    k1 = bound_from_bellow(k1, 1e-16)
-    e1 = bound_from_bellow(e1, 1e-16)
-
-    # Convergence check
-    break_flag, errors = are_close_all([u1,p1,k1,e1],
+        # Convergence check
+        break_flag, errors = are_close_all([u1,p1,k1,e1],
                                         [u0,p0,k0,e0],
                                         TOLERANCE)
-    
-    # Print summary
-    print('iter: %g (%.2f s)   -   L2 errors:' %(iter+1, time.time() - loop_timer), \
-        '  |u1-u0|= %.2e,'     % errors[0], \
-        '  |p1-p0|= %.2e,'     % errors[1], \
-        '  |k1-k0|= %.2e,'     % errors[2], \
-        '  |e1-e0|= %.2e'      % errors[3], \
-        '  (required: %.2e)'   % TOLERANCE)
-    
-    # Update all functions
-    w0.assign(PICARD_RELAXATION * w1 + (1 - PICARD_RELAXATION) * w0)
-    k0.assign(PICARD_RELAXATION * k1 + (1 - PICARD_RELAXATION) * k0)
-    e0.assign(PICARD_RELAXATION * e1 + (1 - PICARD_RELAXATION) * e0)
-    
-    # update residual plot
-    for i, (key, _) in enumerate(residuals.items()):
-        residuals[key].append(errors[i])
+        
+        # Print summary
+        print('iter: %g (%.2f s)   -   L2 errors:' %(iter+1, time.time() - loop_timer), \
+            '  |u1-u0|= %.2e,'     % errors[0], \
+            '  |p1-p0|= %.2e,'     % errors[1], \
+            '  |k1-k0|= %.2e,'     % errors[2], \
+            '  |e1-e0|= %.2e'      % errors[3], \
+            '  (required: %.2e)'   % TOLERANCE)
+        
+        # Update all functions
+        w0.assign(PICARD_RELAXATION * w1 + (1 - PICARD_RELAXATION) * w0)
+        k0.assign(PICARD_RELAXATION * k1 + (1 - PICARD_RELAXATION) * k0)
+        e0.assign(PICARD_RELAXATION * e1 + (1 - PICARD_RELAXATION) * e0)
+        
+        # update residual plot
+        for i, (key, _) in enumerate(residuals.items()):
+            residuals[key].append(errors[i])
 
-    # break if converged
-    if break_flag == True:
-        print('# -------------------------------------------- #')
-        print('#             Simulation converged             #')
-        print('# -------------------------------------------- #')
-        break
+        # break if converged
+        if break_flag == True:
+            print('# -------------------------------------------- #')
+            print('#             Simulation converged             #')
+            print('# -------------------------------------------- #')
+            break
+except:
+    KeyboardInterrupt
 
 u1,p1 = w1.split(deepcopy=True)
 solutions = {'u':u1, 'p':p1, 'k':k1, 'e':e1}
