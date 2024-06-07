@@ -155,9 +155,7 @@ try:
         e1 = bound_from_bellow(e1, 1e-16)
 
         # Convergence check
-        break_flag, errors = are_close_all([u1,p1,k1,e1],
-                                        [u0,p0,k0,e0],
-                                        TOLERANCE)
+        break_flag, errors = are_close_all([u1,p1,k1,e1], [u0,p0,k0,e0], TOLERANCE)
         
         # Print summary
         print('iter: %g (%.2f s)   -   L2 errors:' %(iter+1, time.time() - loop_timer), \
