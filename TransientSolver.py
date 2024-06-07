@@ -157,10 +157,8 @@ for iter in range(ITER_MAX):
         dt.assign(Constant(step_size))
 
     # Loop that solves RANS steps 1,2,3 and KEPS
-    for a,l,bcs,f in zip((a_1,a_2,a_3,a_k,a_e),
-                         (l_1,l_2,l_3,l_k,l_e),
-                         (bcu,bcp,bcu,bck,bce),
-                         (u1, p1, u1, k1, e1)):
+    for a,l,bcs,f in zip((a_1,a_2,a_3,a_k,a_e), (l_1,l_2,l_3,l_k,l_e),
+                         (bcu,bcp,bcu,bck,bce), (u1, p1, u1, k1, e1)):
         # Solve linear system
         A = assemble(a); b = assemble(l)
         [bc.apply(A,b) for bc in bcs]
@@ -171,9 +169,7 @@ for iter in range(ITER_MAX):
     e1 = bound_from_bellow(e1, 1e-16)
 
     # Convergence check
-    break_flag, errors = are_close_all([u1,p1,k1,e1],
-                                        [u0,p0,k0,e0],
-                                        TOLERANCE)
+    break_flag, errors = are_close_all([u1,p1,k1,e1], [u0,p0,k0,e0], TOLERANCE)
     
     # Print summary
     print('iter: %g (%.2f s)   -   L2 errors:' %(iter+1, time.time() - loop_timer), \
