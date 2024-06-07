@@ -11,8 +11,8 @@ from Utilities import load_mesh_from_file, calculate_Distance_field
 # -------------------- Simulation parameters -------------------- #
 
 # mesh and facet directory
-MESH_DIRECTORY  = 'github-kepsilon/meshes/Channel/Coarse/mesh.xdmf'
-FACET_DIRECTORY = 'github-kepsilon/meshes/Channel/Coarse/facet.xdmf'
+MESH_DIRECTORY  = 'meshes/Channel/Coarse/mesh.xdmf'
+FACET_DIRECTORY = '/meshes/Channel/Coarse/facet.xdmf'
 
 # specify what markers belong to what boundary
 INFLOW_MARKERS   = [4]
