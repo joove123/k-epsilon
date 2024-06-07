@@ -143,10 +143,8 @@ loop_timer = time.time()
 try:
     for iter in range(ITER_MAX):
         # Loop that solves RANS steps 1,2,3 and KEPS
-        for a,l,bcs,f in zip((a_w,a_k,a_e),
-                             (l_w,l_k,l_e),
-                             (bcw,bck,bce),
-                             (w1, k1, e1)):
+        for a,l,bcs,f in zip((a_w,a_k,a_e), (l_w,l_k,l_e), (bcw,bck,bce), (w1, k1, e1)):
+            
             # Solve linear system
             A = assemble(a); b = assemble(l)
             [bc.apply(A,b) for bc in bcs]
