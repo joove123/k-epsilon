@@ -12,7 +12,7 @@ from Utilities import load_mesh_from_file, calculate_Distance_field
 
 # mesh and facet directory
 MESH_DIRECTORY  = 'meshes/Channel/Coarse/mesh.xdmf'
-FACET_DIRECTORY = '/meshes/Channel/Coarse/facet.xdmf'
+FACET_DIRECTORY = 'meshes/Channel/Coarse/facet.xdmf'
 
 # specify what markers belong to what boundary
 INFLOW_MARKERS   = [4]
