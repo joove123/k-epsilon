@@ -1,15 +1,15 @@
 # Lam-Bremhorst $k$ - $\varepsilon$ turbulence model implemented in the FEniCS computational platform
 
-This directory contains code used in my master's thesis titled: *Turbulence modeling in computational fluid dynamics* as part of my master's degree in Applied Mathematics at the *University of Southern Denmark (SDU)*. It is also part of a submission for the *proceedings of the FEniCS 2024 conference (FEniCS 2024)*.
+This repository contains code used in my master's thesis titled: *Turbulence modeling in computational fluid dynamics* as part of my master's degree in Applied Mathematics at the *University of Southern Denmark (SDU)*. It is also part of a submission for the *proceedings of the FEniCS 2024 conference (FEniCS 2024)*.
 
-Although only one turbulence model was implemented, namely the *Lam-Bremhorst* $k$ - $\varepsilon$ *model*, the directory is constructed in such a way that it should be easy to add other turbulence models in the ```TurbulenceModel.py``` file.
+Although only one turbulence model was implemented, namely the *Lam-Bremhorst* $k$ - $\varepsilon$ *model*, the repository is constructed in such a way that it should be easy to add other turbulence models in the ```TurbulenceModel.py``` file.
 
 Two test cases have been implemented to validate the model: fully developed channel flow (`ChannelSimulation.py`) and flow over a backward-facing step (`BackStepSimulation.py`). However, meshes for flow around a cylinder and flow in a diffuser geometry are also provided.
 
 ![Turbulent flow over a backward-facing step (image created in ParaView)](Static/plot.png)
 
 ## Installation ##
-To install, simply copy this directory to your machine. Besides FEniCS, make sure you also have the following packages installed: `numpy`, `matplotlib`.
+To install, simply copy this repository to your machine. Besides FEniCS, make sure you also have the following packages installed: `numpy`, `matplotlib`.
 
 ## Governing equations ##
 The $k$ - $\varepsilon$ turbulence model consists of two transport equations, one for turbulent kinetic energy ($k$) and the other for dissipation of turbulent kinetic energy ($\varepsilon$). Together with the Reynolds-Averaged Navier-Stokes (RANS) equations, which are a "version" of the Navier-Stokes (N-S) equations that govern the mean/average flow, they form a closed set of PDEs capable of predicting the mean quantities of a turbulent flow. 
